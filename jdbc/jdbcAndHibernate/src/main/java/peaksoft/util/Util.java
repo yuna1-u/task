@@ -5,9 +5,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import peaksoft.model.User;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-
 public class Util {
     // реализуйте настройку соеденения с БД
 
@@ -22,17 +19,5 @@ public class Util {
             System.out.println(e.getMessage());
         }
         return sessionFactory;
-    }
-
-    public static Connection getConnection(){
-        try {
-            return DriverManager.getConnection(
-                    "jdbc:postgresql://localhost:5432/postgres",
-                    "postgres",
-                    "0802");
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-            return null;
-        }
     }
 }

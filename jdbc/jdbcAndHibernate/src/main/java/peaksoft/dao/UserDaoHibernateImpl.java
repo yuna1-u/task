@@ -1,57 +1,47 @@
 package peaksoft.dao;
 
-import org.hibernate.*;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import peaksoft.model.User;
 import peaksoft.util.Util;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void createUsersTable() {
-        String query = """
-                CREATE TABLE IF NOT EXISTS users (
-                      id        SERIAL PRIMARY KEY,
-                      name      VARCHAR NOT NULL,
-                      last_name VARCHAR,
-                      age       INT
-                  );
-                  """;
-        Connection connection = Util.getConnection();
+        Session session = Util.getSessionFactory().openSession();
         try {
-            assert connection != null;
-            Statement statement = connection.createStatement();
-            statement.execute(query);
-        } catch (SQLException e) {
+            session.beginTransaction();
+            session.getTransaction().commit();
+        } catch (HibernateException e) {
             System.out.println(e.getMessage());
+            session.close();
         }
     }
 
     @Override
     public void dropUsersTable() {
-        String query = "DROP TABLE IF EXISTS users;";
-        Connection connection = Util.getConnection();
         try {
-            assert connection != null;
-            Statement statement = connection.createStatement();
-            statement.execute(query);
-        } catch (SQLException e) {
+            Session session = Util.getSessionFactory().openSession();
+            session.beginTransaction();
+            session.createQuery("DROP TABLE users;");
+            session.getTransaction().commit();
+            session.close();
+        } catch (HibernateException e) {
             System.out.println(e.getMessage());
         }
     }
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-        User user = new User(name, lastName, age);
         try {
             Session session = Util.getSessionFactory().openSession();
             session.beginTransaction();
-            session.persist(user);
+            session.persist(new User(name, lastName, age));
             session.getTransaction().commit();
             session.close();
         } catch (HibernateException e) {
@@ -64,9 +54,8 @@ public class UserDaoHibernateImpl implements UserDao {
         try {
             Session session = Util.getSessionFactory().openSession();
             session.beginTransaction();
-            Query query = session.createQuery("DELETE FROM User WHERE id = :userId");
-            query.setParameter("userId", id);
-            query.executeUpdate();
+            User user = (User) session.get(User.class, id);
+            session.delete(user);
             session.getTransaction().commit();
             session.close();
         } catch (HibernateException e) {
@@ -77,16 +66,16 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public List<User> getAllUsers() {
 
-        List<User> users = new ArrayList<>();
+        List<User> users = null;
+
+        SessionFactory sessionFactory = Util.getSessionFactory();
         try {
-            SessionFactory sessionFactory = Util.getSessionFactory();
             Session session = sessionFactory.openSession();
             session.beginTransaction();
-            Query query = session.createQuery("FROM User");
-            users = query.list();
+            users = session.createQuery("FROM User").list();
             session.getTransaction().commit();
-            session.close();
-        } catch (SessionException e) {
+            sessionFactory.close();
+        } catch (HibernateException e) {
             System.out.println(e.getMessage());
         }
         return users;

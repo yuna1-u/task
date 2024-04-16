@@ -23,7 +23,7 @@ public class Main {
 //        System.out.println(userDaoHibernate.getAllUsers());
 
         //Remove user
-//        userDaoHibernate.removeUserById(3);
+//        userDaoHibernate.removeUserById(7);
 
         //Clean table
 //        userDaoHibernate.cleanUsersTable();
