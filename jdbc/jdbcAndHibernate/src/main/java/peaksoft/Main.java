@@ -16,8 +16,8 @@ public class Main {
 //        userDaoHibernate.createUsersTable();
 
         //Save user
-//        userDaoHibernate.saveUser(user.getName(), user.getLastName(), user.getAge());
-//        userDaoHibernate.saveUser(user2.getName(), user2.getLastName(), user2.getAge());
+        userDaoHibernate.saveUser(user.getName(), user.getLastName(), user.getAge());
+        userDaoHibernate.saveUser(user2.getName(), user2.getLastName(), user2.getAge());
 
         //Get all
 //        System.out.println(userDaoHibernate.getAllUsers());
