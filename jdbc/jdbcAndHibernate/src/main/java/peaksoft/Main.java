@@ -29,7 +29,7 @@ public class Main {
 //        userDaoHibernate.cleanUsersTable();
 
         //Drop table
-        userDaoHibernate.dropUsersTable();
+//        userDaoHibernate.dropUsersTable();
 
     }
 }

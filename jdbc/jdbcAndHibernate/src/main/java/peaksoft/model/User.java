@@ -2,7 +2,6 @@ package peaksoft.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -16,7 +15,7 @@ import jakarta.persistence.*;
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String name;
     @Column(name = "last_name")
