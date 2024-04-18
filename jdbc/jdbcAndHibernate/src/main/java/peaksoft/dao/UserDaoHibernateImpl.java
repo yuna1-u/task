@@ -80,7 +80,8 @@ public class UserDaoHibernateImpl implements UserDao {
         try {
             Session session = Util.getSessionFactory().openSession();
             session.beginTransaction();
-            session.createNativeQuery(("DELETE FROM User"), User.class).executeUpdate();
+            session.clear();
+//            session.createNativeQuery(("DELETE FROM User"), User.class).executeUpdate();
             session.getTransaction().commit();
             session.close();
         } catch (HibernateException e) {
